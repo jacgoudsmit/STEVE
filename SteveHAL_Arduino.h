@@ -6,7 +6,8 @@ MIT License.
 This file declares an Arduino-specific Hardware Abstraction Layer for Steve.
 ****************************************************************************/
 
-#pragma once
+#ifndef _STEVEHAL_ARDUINO_H
+#define _STEVEHAL_ARDUINO_H
 
 #ifdef ARDUINO
 
@@ -186,3 +187,5 @@ protected:
 /////////////////////////////////////////////////////////////////////////////
 // END
 /////////////////////////////////////////////////////////////////////////////
+
+#endif

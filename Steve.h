@@ -107,7 +107,8 @@ different. Because of this, the FT800 and FT801 aren't supported for now.
 
 ****************************************************************************/
 
-#pragma once
+#ifndef _STEVE_H
+#define _STEVE_H
 
 /////////////////////////////////////////////////////////////////////////////
 // INCLUDES
@@ -170,14 +171,14 @@ public:
   // NOTE: Not all of these values correspond to the difference between the
   // addresses above, because not all addresses can be used.
   // [DS2 p41][DS3 p42][DS4 p41][PG2 p253][PG34 p14]
-  const static uint32_t RAM_G_SIZE      = 1024 * 1024;  // General Purpose RAM size
-  const static uint32_t ROM_SIZE        = 1024 * 1024;  // (EVE3/EVE4) ROM size
-  const static uint32_t RAM_DL_SIZE     = 8 * 1024;     // Display List RAM size
-  const static uint32_t RAM_REG_SIZE    = 4 * 1024;     // Registers size
-  const static uint32_t RAM_CMD_SIZE    = 4 * 1024;     // Co-processor command buffer size
-  const static uint32_t RAM_ERR_REPORT_SIZE = 128;      // (EVE4) Co-processor fault report size
-  const static uint32_t RAM_JTBOOT_SIZE = 2 * 1024;     // (EVE4) Touch controller boot code size
-  const static uint32_t FLASH_SIZE      = 256 * 1024 * 1024; // (EVE3/EVE4) Max external flash size
+  const static uint32_t RAM_G_SIZE      = 0x100000UL;   // 1 MB General Purpose RAM size
+  const static uint32_t ROM_SIZE        = 0x100000UL;   // 1 MB (EVE3/EVE4) ROM size
+  const static uint32_t RAM_DL_SIZE     = 0x2000UL;     // 8 KB Display List RAM size
+  const static uint32_t RAM_REG_SIZE    = 0x1000UL;     // 4 KB Registers size
+  const static uint32_t RAM_CMD_SIZE    = 0x1000UL;     // 4 KB Co-processor command buffer size
+  const static uint32_t RAM_ERR_REPORT_SIZE = 0x80UL;   // 128 bytes (EVE4) Co-processor fault report size
+  const static uint32_t RAM_JTBOOT_SIZE = 0x800UL;      // 2 KB (EVE4) Touch controller boot code size
+  const static uint32_t FLASH_SIZE      = 0x10000000UL; // 256 MB (EVE3/EVE4) Max external flash size
 
   // Pseudo address (index) for errors that occurred during a co-processor
   // command
@@ -1769,7 +1770,7 @@ public:
   // to code that's basically equivalent to (value & constant) << constant
   // so this should compile to some pretty small.
   #define N(value, leftbit, rightbit) \
-    ((((uint32_t)value) & ((1 << (((leftbit) - (rightbit)) + 1)) - 1)) << rightbit)
+    ((((uint32_t)value) & ((1UL << (((leftbit) - (rightbit)) + 1)) - 1)) << rightbit)
 
   //-------------------------------------------------------------------------
   // Functions for Display List commands
@@ -2298,3 +2299,5 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 // END
 /////////////////////////////////////////////////////////////////////////////
+
+#endif
