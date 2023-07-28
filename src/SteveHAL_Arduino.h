@@ -6,7 +6,8 @@ MIT License.
 This file declares an Arduino-specific Hardware Abstraction Layer for Steve.
 ****************************************************************************/
 
-#pragma once
+#ifndef _STEVEHAL_ARDUINO_H
+#define _STEVEHAL_ARDUINO_H
 
 #ifdef ARDUINO
 
@@ -50,11 +51,16 @@ This file declares an Arduino-specific Hardware Abstraction Layer for Steve.
 //   switched to a higher frequency once the EVE is ready for it.
 class SteveHAL_Arduino : public SteveHAL
 {
+  // This shouldn't be necessary (Steve is already a friend of our parent
+  // class and the code compiles fine) but Visual Studio's IntelliSense pops
+  // up a lot of errors if we don't put this here.
+  friend class Steve;
+
 private:
   //-------------------------------------------------------------------------
   // Constants and initialization parameters
 
-  SPIClass &_spi;               // SPI instance
+  SPIClass         &_spi;               // SPI instance
   const SPISettings _spi_settings;      // SPI settings
   const int         _pin_cs;            // Chip Select Not Pin
   const int         _pin_pd;            // Power Down Not Pin
@@ -183,3 +189,5 @@ protected:
 /////////////////////////////////////////////////////////////////////////////
 // END
 /////////////////////////////////////////////////////////////////////////////
+
+#endif

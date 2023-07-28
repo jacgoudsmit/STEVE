@@ -5,9 +5,9 @@ VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Steve", "Steve.vcxitems", "{16FDCCF8-804C-4900-B413-A0FAF19F29EC}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CFA480128Ex-039Tx", "Examples\CFA480128Ex-039Tx\CFA480128Ex-039Tx.vcxproj", "{84EA60EC-5942-4519-89C8-C97E7EC0960F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CFA480128Ex-039Tx", "examples\CFA480128Ex-039Tx\CFA480128Ex-039Tx.vcxproj", "{84EA60EC-5942-4519-89C8-C97E7EC0960F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CFA800480E3050Sx", "Examples\CFA800480E3050Sx\CFA800480E3050Sx.vcxproj", "{1B929785-5E89-4224-8994-927A956274D9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CFA800480E3050Sx", "examples\CFA800480E3050Sx\CFA800480E3050Sx.vcxproj", "{1B929785-5E89-4224-8994-927A956274D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,5 +75,10 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {259B0F3D-BD6A-4469-9B50-10A4F5FAF4EE}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Steve.vcxitems*{16fdccf8-804c-4900-b413-a0faf19f29ec}*SharedItemsImports = 9
+		Steve.vcxitems*{1b929785-5e89-4224-8994-927a956274d9}*SharedItemsImports = 4
+		Steve.vcxitems*{84ea60ec-5942-4519-89c8-c97e7ec0960f}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal

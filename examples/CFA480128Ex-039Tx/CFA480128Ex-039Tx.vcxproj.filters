@@ -26,5 +26,8 @@
     <ClInclude Include="BounceDemo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="__vm\.CFA480128Ex-039Tx.vsarduino.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
