@@ -6,8 +6,7 @@ MIT License.
 This file declares a Hardware Abstraction Layer for Steve.
 ****************************************************************************/
 
-#ifndef _STEVEHAL_H
-#define _STEVEHAL_H
+#pragma once
 
 /////////////////////////////////////////////////////////////////////////////
 // HARDWARE ABSTRACTION LAYER
@@ -91,16 +90,14 @@ protected:
   // The HAL class keeps track of whether the call to this function actually
   // changed the state of the !CS line or not, and the return value is
   // used by the Steve class to make sure that the chip is the correct state.
-  virtual bool                          // Returns true if !CS line changed
-    Select(
-      bool enable) = 0;                   // True=select (!CS low) false=de-sel
+  virtual bool Select(                  // Returns true if !CS line changed
+    bool enable) = 0;                   // True=select (!CS low) false=de-sel
 
 protected:
   //-------------------------------------------------------------------------
   // Transfer data to and from the EVE chip
-  virtual uint8_t                       // Returns received byte
-    Transfer(
-      uint8_t value) = 0;                 // Byte to send
+  virtual uint8_t Transfer(             // Returns received byte
+    uint8_t value) = 0;                 // Byte to send
 
 protected:
   //-------------------------------------------------------------------------
@@ -140,8 +137,7 @@ protected:
 protected:
   //-------------------------------------------------------------------------
   // Receive an 8-bit value
-  virtual uint8_t                       // Returns incoming value
-    Receive8()
+  virtual uint8_t Receive8()            // Returns incoming value
   {
     return Transfer(0);
   }
@@ -151,8 +147,7 @@ protected:
   // Receive a 16-bit value in little-endian format
   //
   // The least significant byte is received first.
-  virtual uint16_t                      // Returns incoming value
-    Receive16()
+  virtual uint16_t Receive16()          // Returns incoming value
   {
     uint16_t  result;
 
@@ -167,8 +162,7 @@ protected:
   // Receive a 32-bit value in little-endian format
   //
   // The least significant byte is received first.
-  virtual uint32_t                      // Returns incoming value
-    Receive32()
+  virtual uint32_t Receive32()          // Returns incoming value
   {
     uint32_t  result;
 
@@ -183,10 +177,9 @@ protected:
 protected:
   //-------------------------------------------------------------------------
   // Receive a buffer
-  virtual uint32_t                      // Returns number of bytes received
-    ReceiveBuffer(
-      uint8_t *buffer,                    // Buffer to receive to
-      uint32_t len)                       // Number of bytes to receive
+  virtual uint32_t ReceiveBuffer(       // Returns number of bytes received
+    uint8_t *buffer,                    // Buffer to receive to
+    uint32_t len)                       // Number of bytes to receive
   {
     uint32_t result;
     uint8_t *t = buffer;
@@ -205,9 +198,8 @@ protected:
   //
   // This takes a number of previously transmitted bytes and transmit the
   // required number of extra bytes to get the number to a multiple of 4.
-  virtual uint32_t                      // Returns updated number bytes sent
-    SendAlignmentBytes(
-      uint32_t num)                       // Previous number of bytes sent
+  virtual uint32_t SendAlignmentBytes(  // Returns updated number bytes sent
+    uint32_t num)                       // Previous number of bytes sent
   {
     uint32_t result = num;
 
@@ -225,10 +217,9 @@ protected:
   // Send data from a RAM buffer to the chip
   //
   // The function sends a block of data of the given size.
-  virtual uint32_t                      // Returns number of bytes sent
-    SendBuffer(
-      const uint8_t *data,                // Data buffer to send
-      uint32_t len)                       // Buffer length
+  virtual uint32_t SendBuffer(          // Returns number of bytes sent
+    const uint8_t *data,                // Data buffer to send
+    uint32_t len)                       // Buffer length
   {
     uint32_t result;
 
@@ -254,10 +245,9 @@ protected:
   // "65536".
   //
   // If the pointer is NULL, an empty string is sent.
-  virtual uint16_t                      // Returns number of bytes sent
-    SendString(
-      const char *message,                // Characters to send, '\0' is end
-      uint16_t maxlen)                    // Max input length including \0
+  virtual uint16_t SendString(          // Returns number of bytes sent
+    const char *message,                // Characters to send, '\0' is end
+    uint16_t maxlen)                    // Max input length including \0
   {
     uint16_t result;
     const char *s = message;
@@ -292,13 +282,10 @@ protected:
 protected:
   //-------------------------------------------------------------------------
   // Wait for at least the requested time
-  virtual void
-    Delay(
-      uint32_t ms) = 0;                   // Number of milliseconds to wait
+  virtual void Delay(
+    uint32_t ms) = 0;                   // Number of milliseconds to wait
 };
 
 /////////////////////////////////////////////////////////////////////////////
 // END
 /////////////////////////////////////////////////////////////////////////////
-
-#endif

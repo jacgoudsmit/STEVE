@@ -13,15 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>xml;json;txt;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="src">
-      <UniqueIdentifier>{a195d1a7-a981-421a-bcee-6b8b4dac299f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\_micro-api">
-      <UniqueIdentifier>{74620e14-74d2-451d-a5e5-98da103a76e0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\_micro-api\libraries">
-      <UniqueIdentifier>{e57de418-55e6-4fbe-b483-cb126552107f}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\arduino folders read me.txt">
@@ -34,18 +25,6 @@
   <ItemGroup>
     <ClInclude Include="__vm\.CFA800480E3050Sx.vsarduino.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Steve.h">
-      <Filter>src\_micro-api\libraries</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\SteveDisplay.h">
-      <Filter>src\_micro-api\libraries</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\SteveHAL.h">
-      <Filter>src\_micro-api\libraries</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\SteveHAL_Arduino.h">
-      <Filter>src\_micro-api\libraries</Filter>
     </ClInclude>
     <ClInclude Include="BounceDemo.h">
       <Filter>Header Files</Filter>

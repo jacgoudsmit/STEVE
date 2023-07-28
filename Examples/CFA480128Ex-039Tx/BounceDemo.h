@@ -2,8 +2,7 @@
 // (C) 2023 Jac Goudsmit
 // Based upon demo code from the CrystalFontz github repo
 
-#ifndef _BOUNCEDEMO_h
-#define _BOUNCEDEMO_h
+#pragma once
 
 // #if defined(ARDUINO) && ARDUINO >= 100
 //   #include "arduino.h"
@@ -11,7 +10,7 @@
 //   #include "WProgram.h"
 // #endif
 
-#include "Steve.h"
+#include <Steve.h>
 
 class BounceDemo
 {
@@ -284,5 +283,3 @@ public:
   }
 };
 
-
-#endif

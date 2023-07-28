@@ -1,6 +1,4 @@
 // BounceDemo.h
-// (C) 2023 Jac Goudsmit
-// Based upon demo code from the CrystalFontz github repo
 
 #ifndef _BOUNCEDEMO_h
 #define _BOUNCEDEMO_h
@@ -10,8 +8,6 @@
 // #else
 //   #include "WProgram.h"
 // #endif
-
-#include "Steve.h"
 
 class BounceDemo
 {
@@ -32,7 +28,7 @@ private:
   uint8_t         _transparency_direction;
 
 public:
-  //-------------------------------------------------------------------------
+  //-----------------------------------------------------------------------
   // Constructor
   BounceDemo(
     Steve &steve)
@@ -42,7 +38,7 @@ public:
   }
 
 public:
-  //-------------------------------------------------------------------------
+  //-----------------------------------------------------------------------
   // Initialize the demo
   //
   // This should be called in the setup() function
@@ -71,7 +67,7 @@ public:
   }
 
 public:
-  //-------------------------------------------------------------------------
+  //-----------------------------------------------------------------------
   // Add commands to the list
   //
   // This should be called in the loop() function
@@ -131,7 +127,7 @@ public:
   }
 
 public:
-  //-------------------------------------------------------------------------
+  //-----------------------------------------------------------------------
   // Modify the internal variables for the next step
   void Cycle(void)
   {

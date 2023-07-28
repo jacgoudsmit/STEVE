@@ -6,8 +6,7 @@ MIT License.
 This file declares an Arduino-specific Hardware Abstraction Layer for Steve.
 ****************************************************************************/
 
-#ifndef _STEVEHAL_ARDUINO_H
-#define _STEVEHAL_ARDUINO_H
+#pragma once
 
 #ifdef ARDUINO
 
@@ -142,9 +141,8 @@ protected:
 protected:
   //-------------------------------------------------------------------------
   // Select or de-select the chip
-  bool                                  // Returns true if !CS line changed
-    Select(
-      bool enable) override               // True=select (!CS low) false=de-sel
+  bool Select(                          // Returns true if !CS line changed
+    bool enable) override               // True=select (!CS low) false=de-sel
   {
     bool result = (enable != _selected);
 
@@ -164,9 +162,8 @@ protected:
 protected:
   //-------------------------------------------------------------------------
   // Transfer data to and from the EVE chip
-  virtual uint8_t                       // Returns received byte
-    Transfer(
-      uint8_t value) override             // Byte to send
+  virtual uint8_t Transfer(             // Returns received byte
+    uint8_t value) override             // Byte to send
   {
     return _spi.transfer(value);
   }
@@ -174,9 +171,8 @@ protected:
 protected:
   //-------------------------------------------------------------------------
   // Wait for at least the requested time
-  virtual void
-    Delay(
-      uint32_t ms) override               // Number of milliseconds to wait
+  virtual void Delay(
+    uint32_t ms) override               // Number of milliseconds to wait
   {
     delay(ms);
   }
@@ -187,5 +183,3 @@ protected:
 /////////////////////////////////////////////////////////////////////////////
 // END
 /////////////////////////////////////////////////////////////////////////////
-
-#endif

@@ -4,10 +4,7 @@
  Author:  Jac Goudsmit
 */
 
-#include "BounceDemo.h"
-#include <SPI.h>
 #include <Steve.h>
-#include <SteveDisplay.h>
 #include <SteveHAL_Arduino.h>
 
 #include "BounceDemo.h"
@@ -65,8 +62,7 @@ BounceDemo bounceDemo(d);
 
 //---------------------------------------------------------------------------
 // Initialization
-void setup()
-{
+void setup() {
   SPI.begin();
   d.Begin();
 
@@ -76,8 +72,7 @@ void setup()
 
 //---------------------------------------------------------------------------
 // Main program
-void loop()
-{
+void loop() {
   d.CmdWaitComplete();
 
   // Start the command list

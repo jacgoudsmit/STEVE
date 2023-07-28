@@ -4,9 +4,7 @@
  Author:  Jac Goudsmit
 */
 
-#include <SPI.h>
 #include <Steve.h>
-#include <SteveDisplay.h>
 #include <SteveHAL_Arduino.h>
 
 #include "BounceDemo.h"

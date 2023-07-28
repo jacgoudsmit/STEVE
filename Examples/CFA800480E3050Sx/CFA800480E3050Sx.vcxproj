@@ -93,10 +93,6 @@
     <ProjectCapability Include="VisualMicro" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Steve.h" />
-    <ClInclude Include="..\..\SteveDisplay.h" />
-    <ClInclude Include="..\..\SteveHAL.h" />
-    <ClInclude Include="..\..\SteveHAL_Arduino.h" />
     <ClInclude Include="BounceDemo.h" />
     <ClInclude Include="__vm\.CFA800480E3050Sx.vsarduino.h" />
   </ItemGroup>
@@ -104,14 +100,14 @@
     <DebuggerFlavor>VisualMicroDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)..\CFA800480E3050Sx;C:\Users\jacgo\AppData\Local\arduino15\packages\arduino\hardware\avr\1.8.6\libraries\SPI\src;C:\Users\jacgo\OneDrive\Documents\Arduino\libraries\Steve;C:\\Users\\jacgo\\AppData\\Local\\arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino;C:\\Users\\jacgo\\AppData\\Local\\arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\standard;c:\users\jacgo\appdata\local\arduino15\packages\arduino\tools\avr-gcc\7.3.0-atmel3.6.1-arduino7\lib\gcc\avr\7.3.0\include;c:\users\jacgo\appdata\local\arduino15\packages\arduino\tools\avr-gcc\7.3.0-atmel3.6.1-arduino7\lib\gcc\avr\7.3.0\include-fixed;c:\users\jacgo\appdata\local\arduino15\packages\arduino\tools\avr-gcc\7.3.0-atmel3.6.1-arduino7\avr\include;C:\Users\jacgo\AppData\Local\arduino15\packages\arduino\hardware\avr\1.8.6\libraries\SPI\src;C:\Users\jacgo\OneDrive\Documents\Arduino\libraries\Steve;$(ProjectDir)..\..\..\Steve</IncludePath>
+    <IncludePath>$(ProjectDir)..\CFA800480E3050Sx;C:\Users\jacgo\OneDrive\Documents\Arduino\libraries\Steve\src;C:\Users\jacgo\AppData\Local\arduino15\packages\arduino\hardware\avr\1.8.6\libraries\SPI\src;C:\\Users\\jacgo\\AppData\\Local\\arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino;C:\\Users\\jacgo\\AppData\\Local\\arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\standard;c:\users\jacgo\appdata\local\arduino15\packages\arduino\tools\avr-gcc\7.3.0-atmel3.6.1-arduino7\lib\gcc\avr\7.3.0\include;c:\users\jacgo\appdata\local\arduino15\packages\arduino\tools\avr-gcc\7.3.0-atmel3.6.1-arduino7\lib\gcc\avr\7.3.0\include-fixed;c:\users\jacgo\appdata\local\arduino15\packages\arduino\tools\avr-gcc\7.3.0-atmel3.6.1-arduino7\avr\include;C:\Users\jacgo\OneDrive\Documents\Arduino\libraries\Steve\src</IncludePath>
     <RemoteCCompileToolExe>C:\\Users\\jacgo\\AppData\\Local\\arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7\bin\avr-g++</RemoteCCompileToolExe>
     <RemoteCppCompileToolExe>C:\\Users\\jacgo\\AppData\\Local\\arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7\bin\avr-g++</RemoteCppCompileToolExe>
     <ValidateArchitecture>false</ValidateArchitecture>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\CFA800480E3050Sx;C:\Users\jacgo\AppData\Local\arduino15\packages\arduino\hardware\avr\1.8.6\libraries\SPI\src;C:\Users\jacgo\OneDrive\Documents\Arduino\libraries\Steve;C:\\Users\\jacgo\\AppData\\Local\\arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino;C:\\Users\\jacgo\\AppData\\Local\\arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\standard;c:\users\jacgo\appdata\local\arduino15\packages\arduino\tools\avr-gcc\7.3.0-atmel3.6.1-arduino7\lib\gcc\avr\7.3.0\include;c:\users\jacgo\appdata\local\arduino15\packages\arduino\tools\avr-gcc\7.3.0-atmel3.6.1-arduino7\lib\gcc\avr\7.3.0\include-fixed;c:\users\jacgo\appdata\local\arduino15\packages\arduino\tools\avr-gcc\7.3.0-atmel3.6.1-arduino7\avr\include;C:\Users\jacgo\AppData\Local\arduino15\packages\arduino\hardware\avr\1.8.6\libraries\SPI\src;C:\Users\jacgo\OneDrive\Documents\Arduino\libraries\Steve;$(ProjectDir)..\..\..\Steve;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\CFA800480E3050Sx;C:\Users\jacgo\OneDrive\Documents\Arduino\libraries\Steve\src;C:\Users\jacgo\AppData\Local\arduino15\packages\arduino\hardware\avr\1.8.6\libraries\SPI\src;C:\\Users\\jacgo\\AppData\\Local\\arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino;C:\\Users\\jacgo\\AppData\\Local\\arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\standard;c:\users\jacgo\appdata\local\arduino15\packages\arduino\tools\avr-gcc\7.3.0-atmel3.6.1-arduino7\lib\gcc\avr\7.3.0\include;c:\users\jacgo\appdata\local\arduino15\packages\arduino\tools\avr-gcc\7.3.0-atmel3.6.1-arduino7\lib\gcc\avr\7.3.0\include-fixed;c:\users\jacgo\appdata\local\arduino15\packages\arduino\tools\avr-gcc\7.3.0-atmel3.6.1-arduino7\avr\include;C:\Users\jacgo\OneDrive\Documents\Arduino\libraries\Steve\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <GccToolChain>C:\\Users\\jacgo\\AppData\\Local\\arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7\bin\avr-g++</GccToolChain>
       <CppLanguageStandard>gnu++11</CppLanguageStandard>
       <CLanguageStandard>gnu11</CLanguageStandard>
