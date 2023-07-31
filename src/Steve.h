@@ -291,8 +291,10 @@ public:
 public:
   //-------------------------------------------------------------------------
   // Convert RGB values to an RGB24 value
-  static uint32_t                       // Returns 24-bit RGB value
-    RGB(uint8_t r, uint8_t g, uint8_t b)
+  static uint32_t toRGB(                // Returns 24-bit RGB value
+      uint8_t r,                        // Red
+      uint8_t g,                        // Green
+      uint8_t b)                        // Blue
   {
     return (uint32_t)r << 16 | (uint32_t)g << 8 | (uint32_t)b;
   }
@@ -1042,9 +1044,14 @@ public:
   Begin()
   {
     // Wake up the EVE
-    DBG_GEEK("Resetting\n");
+    DBG_GEEK("Begin\n");
 
-    End();
+    if (!_hal.Begin())
+    {
+      return false;
+    }
+
+    InternalEnd();
 
     _hal.Power(true);                   // Power on
     _hal.Delay(21);                     // More holding
@@ -1239,15 +1246,24 @@ public:
     }
   }
 
-public:
+protected:
   //-------------------------------------------------------------------------
-  // End communication with the EVE chip
-  void End()
+  // End communication without ending the HAL
+  void InternalEnd()
   {
     Pause(true);
     _hal.Delay(20);                     // Wait a few ms before waking it up
     _hal.Power(false);                  // Reset
     _hal.Delay(6);                      // Hold for a little while
+  }
+
+public:
+  //-------------------------------------------------------------------------
+  // End communication with the EVE chip
+  void End()
+  {
+    InternalEnd();
+    _hal.End();
   }
 
   //=========================================================================

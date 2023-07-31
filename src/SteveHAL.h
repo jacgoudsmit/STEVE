@@ -44,7 +44,28 @@ protected:
 
 protected:
   //-------------------------------------------------------------------------
-  // Initialize the communication
+  // Initialize the hardware
+  //
+  // This is called by Steve to initialize the hardware, e.g. to open a port,
+  virtual bool Begin()                  // Returns true if successful
+  {
+    // Nothing
+    return true;
+  }
+
+protected:
+  //-------------------------------------------------------------------------
+  // Shut down the hardware
+  //
+  // Terminate the hardware e.g. close ports
+  virtual void End()
+  {
+    // Nothing
+  }
+
+protected:
+  //-------------------------------------------------------------------------
+  // Set the speed to slow or fast.
   //
   // This is called by Steve to initialize the communication with the EVE
   // chip.
