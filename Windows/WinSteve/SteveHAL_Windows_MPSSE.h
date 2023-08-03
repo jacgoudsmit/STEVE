@@ -80,6 +80,7 @@ protected:
   UINT32            _clockRate;         // Clock frequency to use
 
   FT_HANDLE         _ftHandle;          // Handle to the channel
+  bool              _selected;          // True if EVE chip is selected
 
 public:
   //-------------------------------------------------------------------------
@@ -92,6 +93,7 @@ public:
     _clockRate = clockrate;
 
     _ftHandle = 0;
+    _selected = true;
   }
 
 protected:
@@ -158,7 +160,7 @@ protected:
         rate = 8000000;
       }
 
-      ChannelConfig channelConf;
+      ChannelConfig channelConf = { 0 };
       channelConf.ClockRate = rate;
       channelConf.LatencyTimer = 10;
       channelConf.configOptions = SPI_CONFIG_OPTION_MODE0 | SPI_CONFIG_OPTION_CS_DBUS3 | SPI_CONFIG_OPTION_CS_ACTIVELOW;
@@ -169,6 +171,15 @@ protected:
         fprintf(stderr, "Channel %u failed to initialize SPI status %u\n", _channel, status);
         exit(-3);
       }
+
+/*
+      status = FT_SetUSBParameters(_ftHandle, 64, 64);
+      if (status != FT_OK)
+      {
+        fprintf(stderr, "Channel %u failed to setup USB parameters %u\n", _channel, status);
+        exit(-3);
+      }
+*/
     }
   }
 
@@ -203,9 +214,16 @@ protected:
   virtual bool Select(
     bool enable) override               // True=select (!CS low) false=de-sel
   {
-    SPI_ToggleCS(_ftHandle, !!enable);
+    bool result = (enable != _selected);
 
-    return true;
+    if (result)
+    {
+      SPI_ToggleCS(_ftHandle, !!enable);
+
+      _selected = enable;
+    }
+
+    return result;
   }
 
 protected:
@@ -214,11 +232,170 @@ protected:
   virtual uint8_t Transfer(             // Returns received byte
     uint8_t value) override             // Byte to send
   {
-    UINT8 result;
-    DWORD transferred;
+    fprintf(stderr, "BUG: You shouldn't get here");
+    exit(-3);
+  }
 
-    SPI_ReadWrite(_ftHandle, &result, &value , 1, &transferred, 0);
+protected:
+  //-------------------------------------------------------------------------
+  // Send an 8-bit value
+  virtual void Send8(
+    uint8_t value)                      // Value to send
+  {
+    DWORD sizeTransferred;
+
+    // NOTE: Little-endian system assumed
+    if (FT_OK != SPI_Write(_ftHandle, &value, 1, &sizeTransferred, 0))
+    {
+      fprintf(stderr, "SPI_Write failed");
+      exit(-3);
+    }
+  }
+
+protected:
+  //-------------------------------------------------------------------------
+  // Send a 16-bit value in little-endian format
+  //
+  // The least significant byte is sent first.
+  virtual void Send16(
+    uint16_t value)                     // Value to send
+  {
+    DWORD sizeTransferred;
+
+    // NOTE: Little-endian system assumed
+    if (FT_OK != SPI_Write(_ftHandle, (uint8_t *)&value, 2, &sizeTransferred, 0))
+    {
+      fprintf(stderr, "SPI_Write failed");
+      exit(-3);
+    }
+  }
+
+protected:
+  //-------------------------------------------------------------------------
+  // Send a 24 bit value in BIG ENDIAN format
+  virtual void Send24BE(
+    uint32_t value)                     // Value to send (MSB ignored)
+  {
+    UINT32 buf = ((value >> 16) & 0xFF) | (value & 0x00FF00) | ((value & 0xFF) << 16);
+    DWORD sizeTransferred;
+
+    if (FT_OK != SPI_Write(_ftHandle, (uint8_t *)&buf, 3, &sizeTransferred, 0))
+    {
+      fprintf(stderr, "SPI_Write failed");
+      exit(-3);
+    }
+  }
+
+protected:
+  //-------------------------------------------------------------------------
+  // Send a 32-bit value in little-endian format
+  //
+  // The least significant byte is sent first.
+  virtual void Send32(
+    uint32_t value)                     // Value to send
+  {
+    DWORD sizeTransferred;
+
+    // NOTE: Little-endian system assumed
+    if (FT_OK != SPI_Write(_ftHandle, (uint8_t *)&value, 4, &sizeTransferred, 0))
+    {
+      fprintf(stderr, "SPI_Write failed");
+      exit(-3);
+    }
+  }
+
+protected:
+  //-------------------------------------------------------------------------
+  // Send data from a RAM buffer to the chip
+  virtual uint32_t SendBuffer(          // Returns number of bytes sent
+    const uint8_t *buffer,              // Buffer to send
+    uint32_t len)                       // Number of bytes to send
+  {
+    DWORD sizeTransferred;
+
+    if (FT_OK != SPI_Write(_ftHandle, (UCHAR *)buffer, len, &sizeTransferred, 0))
+    {
+      fprintf(stderr, "SPI_Write failed");
+      exit(-3);
+    }
+
+    return sizeTransferred;
+  }
+
+protected:
+  //-------------------------------------------------------------------------
+  // Receive an 8-bit value
+  virtual uint8_t Receive8()            // Returns incoming value
+  {
+    uint8_t result;
+    DWORD sizeTransferred;
+
+    // NOTE: Little-endian system assumed.
+    if (FT_OK != SPI_Read(_ftHandle, &result, 1, &sizeTransferred, 0))
+    {
+      fprintf(stderr, "SPI_Read failed");
+      exit(-3);
+    }
+
     return result;
+  }
+
+protected:
+  //-------------------------------------------------------------------------
+  // Receive a 16-bit value in little-endian format
+  //
+  // The least significant byte is received first.
+  virtual uint16_t Receive16()          // Returns incoming value
+  {
+    uint16_t result;
+    DWORD sizeTransferred;
+
+    // NOTE: Little-endian system assumed.
+    if (FT_OK != SPI_Read(_ftHandle, (uint8_t *)&result, 2, &sizeTransferred, 0))
+    {
+      fprintf(stderr, "SPI_Read failed");
+      exit(-3);
+    }
+
+    return result;
+  }
+
+protected:
+  //-------------------------------------------------------------------------
+  // Receive a 32-bit value in little-endian format
+  //
+  // The least significant byte is received first.
+  virtual uint32_t Receive32()          // Returns incoming value
+  {
+    uint32_t result;
+    DWORD sizeTransferred;
+
+    // NOTE: Little-endian system assumed.
+    if (FT_OK != SPI_Read(_ftHandle, (uint8_t *)&result, 4, &sizeTransferred, 0))
+    {
+      fprintf(stderr, "SPI_Read failed");
+      exit(-3);
+    }
+
+    return result;
+  }
+
+protected:
+  //-------------------------------------------------------------------------
+  // Receive a buffer
+  virtual uint32_t ReceiveBuffer(       // Returns number of bytes received
+    uint8_t *buffer,                    // Buffer to receive to
+    uint32_t len)                       // Number of bytes to receive
+  {
+    DWORD sizeTransferred;
+
+    if (FT_OK != SPI_Read(_ftHandle, buffer, len, &sizeTransferred, 0))
+    {
+      fprintf(stderr, "SPI_Read failed");
+      exit(-3);
+    }
+
+    return sizeTransferred;
   }
 
 protected:

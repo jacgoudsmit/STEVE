@@ -144,6 +144,20 @@ protected:
 
 protected:
   //-------------------------------------------------------------------------
+  // Send a 24 bit value in BIG ENDIAN format
+  //
+  // The MOST significant byte is sent first. This is only used for host
+  // commands and read/write address setups
+  virtual void Send24BE(
+    uint32_t value)                     // Value to send (MSB ignored)
+  {
+    Transfer((uint8_t)(value >> 16));
+    Transfer((uint8_t)(value >> 8));
+    Transfer((uint8_t)(value));
+  }
+
+protected:
+  //-------------------------------------------------------------------------
   // Send a 32-bit value in little-endian format
   //
   // The least significant byte is sent first.
@@ -154,6 +168,26 @@ protected:
     Transfer((uint8_t)(value >> 8));
     Transfer((uint8_t)(value >> 16));
     Transfer((uint8_t)(value >> 24));
+  }
+
+protected:
+  //-------------------------------------------------------------------------
+  // Send data from a RAM buffer to the chip
+  //
+  // The function sends a block of data of the given size.
+  virtual uint32_t SendBuffer(          // Returns number of bytes sent
+    const uint8_t *buffer,              // Buffer to send
+    uint32_t len)                       // Number of bytes to send
+  {
+    uint32_t result;
+
+    const uint8_t *p = buffer;
+    for (result = 0; result < len; result++)
+    {
+      Send8(*p++);
+    }
+
+    return result;
   }
 
 protected:
@@ -236,26 +270,6 @@ protected:
 
 protected:
   //-------------------------------------------------------------------------
-  // Send data from a RAM buffer to the chip
-  //
-  // The function sends a block of data of the given size.
-  virtual uint32_t SendBuffer(          // Returns number of bytes sent
-    const uint8_t *data,                // Data buffer to send
-    uint32_t len)                       // Buffer length
-  {
-    uint32_t result;
-
-    const uint8_t *p = data;
-    for (result = 0; result < len; result++)
-    {
-      Send8(*p++);
-    }
-
-    return result;
-  }
-
-protected:
-  //-------------------------------------------------------------------------
   // Send a nul-terminated string
   //
   // The function reads a string from RAM, and transfers it to the EVE
@@ -263,40 +277,30 @@ protected:
   // it reaches the maximum length minus one. Then it sends a byte 0x00.
   //
   // The maximum length parameter includes the nul-terminator byte. If 0 is
-  // used for the maximum length parameter, the value is interpreted as
-  // "65536".
+  // used for the maximum length parameter, nothing is sent, not even a '\0'.
   //
   // If the pointer is NULL, an empty string is sent.
   virtual uint16_t SendString(          // Returns number of bytes sent
     const char *message,                // Characters to send, '\0' is end
     uint16_t maxlen)                    // Max input length including \0
   {
-    uint16_t result;
-    const char *s = message;
+    uint16_t result = 0;
 
-    // Replace the pointer if it's NULL
-    if (!s)
+    if (maxlen)
     {
-      s = "";
-    }
+      const char *s = message;
 
-    // Send the non-nul characters. Note: if maxlen is 0, maxlen - 1
-    // underflows to 65535.
-    for (result = 0; result < maxlen - 1; result++)
-    {
-      char c = *s++;
-
-      if (!c)
+      // Replace the pointer if it's NULL
+      if (!s)
       {
-        break;
+        s = "";
       }
 
-      Send8(c);
-    }
+      size_t len = strnlen(s, (size_t)(maxlen - 1));
 
-    // Always send nul terminator byte
-    Send8(0);
-    result += 1;
+      result = SendBuffer((uint8_t *)message, len) + 1;
+      Send8(0);
+    }
 
     return result;
   }

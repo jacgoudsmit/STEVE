@@ -24,7 +24,7 @@
 // These include files each declare a display type and an instance that can
 // be used for all displays of that type.
 //
-// Include commands for display types that you don't use, can be
+// Include-commands for display types that you don't use, can be
 // commented out.
 #include "SteveDisplay_CFA800480.h"
 #include "SteveDisplay_CFA480128.h"

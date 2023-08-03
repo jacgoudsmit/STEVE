@@ -14,18 +14,18 @@ class BounceDemo
 private:
   Steve &eve;
 
-  int32_t         _x_position;
-  int32_t         _x_velocity;
-  int32_t         _y_position;
-  int32_t         _y_velocity;
-  int32_t         _ball_size;
-  int32_t         _ball_delta;
+  int32_t         _x_position = 0;
+  int32_t         _x_velocity = 0;
+  int32_t         _y_position = 0;
+  int32_t         _y_velocity = 0;
+  int32_t         _ball_size = 0;
+  int32_t         _ball_delta = 0;
   //Cycle the color around
-  uint8_t         _r;
-  uint8_t         _g;
-  uint8_t         _b;
-  uint8_t         _transparency;
-  uint8_t         _transparency_direction;
+  uint8_t         _r = 0;
+  uint8_t         _g = 0;
+  uint8_t         _b = 0;
+  uint8_t         _transparency = 0;
+  uint8_t         _transparency_direction = 0;
 
 public:
   //-----------------------------------------------------------------------

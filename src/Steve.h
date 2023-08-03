@@ -1289,9 +1289,7 @@ protected:
     _hal.Select(true);
 
     // Send the lower 3 bytes of the command in BIG ENDIAN order.
-    _hal.Send8((uint8_t)(data24 >> 16));
-    _hal.Send8((uint8_t)(data24 >> 8));
-    _hal.Send8((uint8_t)(data24));
+    _hal.Send24BE(data24);
   }
 
 protected:
