@@ -82,6 +82,10 @@ protected:
   FT_HANDLE         _ftHandle;          // Handle to the channel
   bool              _selected;          // True if EVE chip is selected
 
+  const static size_t _cacheSize = 128; // Size of cache buffer
+  BYTE              _cache[_cacheSize]; // Write cache buffer
+  size_t            _cacheIndex;        // Number of bytes in cache
+
 public:
   //-------------------------------------------------------------------------
   // Constructor
@@ -94,6 +98,8 @@ public:
 
     _ftHandle = 0;
     _selected = true;
+
+    _cacheIndex = 0;
   }
 
 protected:
@@ -155,7 +161,7 @@ protected:
     if (slow)
     {
       UINT32 rate = _clockRate;
-      if (slow && rate > 8000000)
+      if (slow && (rate > 8000000))
       {
         rate = 8000000;
       }
@@ -206,6 +212,59 @@ protected:
 
     // Change CS back to pin DBUS3 (Orange)
     SPI_ChangeCS(_ftHandle, SPI_CONFIG_OPTION_MODE0 | SPI_CONFIG_OPTION_CS_DBUS3 | SPI_CONFIG_OPTION_CS_ACTIVELOW);
+
+    _cacheIndex = 0;
+  }
+
+protected:
+  //-------------------------------------------------------------------------
+  // Send write cache buffer
+  void SendCache()
+  {
+    if (_cacheIndex)
+    {
+      DWORD sizeTransferred;
+
+      SPI_Write(_ftHandle, _cache, _cacheIndex, &sizeTransferred, 0);
+
+      _cacheIndex = 0;
+    }
+  }
+
+protected:
+  //-------------------------------------------------------------------------
+  // Store data in cache
+  size_t WriteToCache(LPCVOID buf, size_t size)
+  {
+    size_t result = 0;
+    const UCHAR *block = (const UCHAR *)buf;
+    size_t remsize = size;
+
+    while (remsize)
+    {
+      size_t blocksize = remsize;
+
+      if (_cacheIndex + blocksize > _cacheSize)
+      {
+        blocksize = _cacheSize - _cacheIndex;
+      }
+
+      if (blocksize)
+      {
+        memcpy(&_cache[_cacheIndex], block, blocksize);
+        block += blocksize;
+        _cacheIndex += blocksize;
+        remsize -= blocksize;
+        result += blocksize;
+      }
+
+      if (_cacheIndex == _cacheSize)
+      {
+        SendCache();
+      }
+    }
+
+    return result;
   }
 
 protected:
@@ -218,6 +277,11 @@ protected:
 
     if (result)
     {
+      if (!enable)
+      {
+        SendCache();
+      }
+
       SPI_ToggleCS(_ftHandle, !!enable);
 
       _selected = enable;
@@ -242,14 +306,7 @@ protected:
   virtual void Send8(
     uint8_t value)                      // Value to send
   {
-    DWORD sizeTransferred;
-
-    // NOTE: Little-endian system assumed
-    if (FT_OK != SPI_Write(_ftHandle, &value, 1, &sizeTransferred, 0))
-    {
-      fprintf(stderr, "SPI_Write failed");
-      exit(-3);
-    }
+    WriteToCache(&value, 1);
   }
 
 protected:
@@ -260,14 +317,7 @@ protected:
   virtual void Send16(
     uint16_t value)                     // Value to send
   {
-    DWORD sizeTransferred;
-
-    // NOTE: Little-endian system assumed
-    if (FT_OK != SPI_Write(_ftHandle, (uint8_t *)&value, 2, &sizeTransferred, 0))
-    {
-      fprintf(stderr, "SPI_Write failed");
-      exit(-3);
-    }
+    WriteToCache(&value, 2);
   }
 
 protected:
@@ -277,13 +327,8 @@ protected:
     uint32_t value)                     // Value to send (MSB ignored)
   {
     UINT32 buf = ((value >> 16) & 0xFF) | (value & 0x00FF00) | ((value & 0xFF) << 16);
-    DWORD sizeTransferred;
 
-    if (FT_OK != SPI_Write(_ftHandle, (uint8_t *)&buf, 3, &sizeTransferred, 0))
-    {
-      fprintf(stderr, "SPI_Write failed");
-      exit(-3);
-    }
+    WriteToCache(&buf, 3);
   }
 
 protected:
@@ -294,14 +339,7 @@ protected:
   virtual void Send32(
     uint32_t value)                     // Value to send
   {
-    DWORD sizeTransferred;
-
-    // NOTE: Little-endian system assumed
-    if (FT_OK != SPI_Write(_ftHandle, (uint8_t *)&value, 4, &sizeTransferred, 0))
-    {
-      fprintf(stderr, "SPI_Write failed");
-      exit(-3);
-    }
+    WriteToCache(&value, 4);
   }
 
 protected:
@@ -311,15 +349,7 @@ protected:
     const uint8_t *buffer,              // Buffer to send
     uint32_t len)                       // Number of bytes to send
   {
-    DWORD sizeTransferred;
-
-    if (FT_OK != SPI_Write(_ftHandle, (UCHAR *)buffer, len, &sizeTransferred, 0))
-    {
-      fprintf(stderr, "SPI_Write failed");
-      exit(-3);
-    }
-
-    return sizeTransferred;
+    return WriteToCache(buffer, len);
   }
 
 protected:
@@ -329,6 +359,11 @@ protected:
   {
     uint8_t result;
     DWORD sizeTransferred;
+
+    if (_cacheIndex)
+    {
+      SendCache();
+    }
 
     // NOTE: Little-endian system assumed.
     if (FT_OK != SPI_Read(_ftHandle, &result, 1, &sizeTransferred, 0))
@@ -350,6 +385,11 @@ protected:
     uint16_t result;
     DWORD sizeTransferred;
 
+    if (_cacheIndex)
+    {
+      SendCache();
+    }
+
     // NOTE: Little-endian system assumed.
     if (FT_OK != SPI_Read(_ftHandle, (uint8_t *)&result, 2, &sizeTransferred, 0))
     {
@@ -370,6 +410,11 @@ protected:
     uint32_t result;
     DWORD sizeTransferred;
 
+    if (_cacheIndex)
+    {
+      SendCache();
+    }
+
     // NOTE: Little-endian system assumed.
     if (FT_OK != SPI_Read(_ftHandle, (uint8_t *)&result, 4, &sizeTransferred, 0))
     {
@@ -388,6 +433,11 @@ protected:
     uint32_t len)                       // Number of bytes to receive
   {
     DWORD sizeTransferred;
+
+    if (_cacheIndex)
+    {
+      SendCache();
+    }
 
     if (FT_OK != SPI_Read(_ftHandle, buffer, len, &sizeTransferred, 0))
     {
